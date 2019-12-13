@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class FastFoods extends Food implements Serializable {
 
-    static private ObservableList<FastFoods> fastFoods;
+    static private ObservableList<FastFoods> fastFoods = FXCollections.observableArrayList();
 
     transient private final SimpleIntegerProperty transFat = new SimpleIntegerProperty();
     transient private final SimpleIntegerProperty saturatedFat = new SimpleIntegerProperty();
@@ -26,8 +26,11 @@ public class FastFoods extends Food implements Serializable {
          setSaturatedFat(saturatedFat);
          setChainName(chainName);
 
-         fastFoods = FXCollections.observableArrayList();
 
+     }
+
+     public static ObservableList<FastFoods> getFastFoodsList() {
+         return fastFoods;
      }
 
      public int getTransFat() {
@@ -167,7 +170,12 @@ public class FastFoods extends Food implements Serializable {
         }
 
     }
+    static void addFastFood() {
+        fastFoods.add(new FastFoods( "", 0, 0, 0, 0,0, 0, 0 , ""));
+    }
 
-
+    static void deleteFastFood(FastFoods fastFood) {
+        fastFoods.remove(fastFood);
+    }
 
 }

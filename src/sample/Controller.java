@@ -14,6 +14,8 @@ import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 
 public class Controller {
@@ -141,13 +143,22 @@ myTableColumn1.setOnEditCommit(
                 }
         );
 
-        myTableView.setItems(FastFoods.getFastFood());
+        myTableView.setItems(FastFoods.getFastFoodsList());
 //        int size = FastFoods.getAmount();
 //        for (int i = 0; i < size; i = i + 1) {
 //
 //            myTableView.getItems().add(FastFoods.getFastFood(i));
 //
-
+        File savedDataFile = new File(savedDataFilePath);
+        if (savedDataFile.exists()) {
+            try {
+                FileInputStream file = new FileInputStream(savedDataFilePath);
+                AlbumModel.restoreData(file);
+                file.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 //
 //        }
 
@@ -164,6 +175,31 @@ myTableColumn1.setOnEditCommit(
             // Update model
             FastFoods.importFastFoods(dataFile);
             // Table will be updated automatically
+        }
+    }
+
+    public void addRow() {
+        // Update model
+        FastFoods.addFastFood();
+    }
+    public void save() {
+        try {
+            // Save model
+            FileOutputStream file = new FileOutputStream(savedDataFilePath);
+            FastFoods.saveData(file);
+            file.close();
+            // Update status
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void deleteRow() {
+        // Selected album
+        FastFoods fastFoods = (FastFoods)myTableView.getSelectionModel().getSelectedItem();
+        if (fastFoods != null) {
+            // Update model
+            FastFoods.deleteFastFood(fastFoods);
+            // Update status
         }
     }
 

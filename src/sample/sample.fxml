@@ -24,8 +24,8 @@
                   <Label prefHeight="53.0" prefWidth="166.0" text="    All Units are in Grams" />
                   <Button fx:id="importButton" mnemonicParsing="false" onAction="#importData" prefHeight="53.0" prefWidth="129.0" text="Import Data" />
                   <Button fx:id="importImageButton" mnemonicParsing="false" prefHeight="53.0" prefWidth="121.0" text="Important Image" />
-                  <Button fx:id="addRowButton" mnemonicParsing="false" prefHeight="53.0" prefWidth="131.0" text="Add Row" />
-                  <Button fx:id="deleteRowButton" mnemonicParsing="false" prefHeight="53.0" prefWidth="150.0" text="Delete Row" />
+                  <Button fx:id="addRowButton" mnemonicParsing="false" onAction="#addRow" prefHeight="53.0" prefWidth="131.0" text="Add Row" />
+                  <Button fx:id="deleteRowButton" mnemonicParsing="false" onAction="#deleteRow" prefHeight="53.0" prefWidth="150.0" text="Delete Row" />
                </children>
             </HBox>
             <GridPane prefHeight="903.0" prefWidth="1023.0">
