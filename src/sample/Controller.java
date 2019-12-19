@@ -1,18 +1,21 @@
 package sample;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.DoubleStringConverter;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,10 +38,12 @@ public class Controller {
     public Button importImageButton;
     public Button deleteRowButton;
     public Button addRowButton;
+    public ImageView myImageView2;
+    private final String savedDataFilePath = "/tmp/FastFoodData";
 
     public void initialize() {
         // load data into table view
-    myTableColumn1.setCellValueFactory(new PropertyValueFactory<FastFoods, String>("chainName"));
+        myTableColumn1.setCellValueFactory(new PropertyValueFactory<FastFoods, String>("chainName"));
     myTableColumn2.setCellValueFactory(new PropertyValueFactory<FastFoods, String>("name"));
     myTableColumn3.setCellValueFactory(new PropertyValueFactory<FastFoods, Integer>("servingSize"));
     myTableColumn4.setCellValueFactory(new PropertyValueFactory<FastFoods, Integer>("calories"));
@@ -56,7 +61,6 @@ public class Controller {
         myTableColumn7.setEditable(true);
         myTableColumn8.setEditable(true);
         myTableColumn9.setEditable(true);
-
 
 
         myTableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -144,6 +148,22 @@ myTableColumn1.setOnEditCommit(
         );
 
         myTableView.setItems(FastFoods.getFastFoodsList());
+        myTableView.getSelectionModel().selectFirst();
+
+        myTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                System.out.println("tableview selection changed");
+                FastFoods fastFood = (FastFoods)myTableView.getSelectionModel().getSelectedItem();
+                if (fastFood.getMyImage() != null) {
+                    myImageView2.setImage(fastFood.getMyImage());
+                } else {
+                    myImageView2.setImage(null);
+                }
+            }
+        });
+
+
 //        int size = FastFoods.getAmount();
 //        for (int i = 0; i < size; i = i + 1) {
 //
@@ -153,7 +173,7 @@ myTableColumn1.setOnEditCommit(
         if (savedDataFile.exists()) {
             try {
                 FileInputStream file = new FileInputStream(savedDataFilePath);
-                AlbumModel.restoreData(file);
+                FastFoods.restoreData(file);
                 file.close();
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -202,5 +222,33 @@ myTableColumn1.setOnEditCommit(
             // Update status
         }
     }
+    public void updateMyImage() {
+        // Bring up File chooser to choose image
+        FileChooser imageChooser = new FileChooser();
+        imageChooser.setTitle("Choose Image");
+        // Only let JPG and PNGs to be chosen
+        imageChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png", ".gif" )
+        );
+        File imageFile = imageChooser.showOpenDialog(this.primaryStage);
+        // Check if an image was chosen
+        if (imageFile != null) {
+            Image newImage = new Image(imageFile.toURI().toString());
+            // Update UI
+            myImageView2.setImage(newImage);
 
+            // Update model
+            FastFoods fastFood = (FastFoods)myTableView.getSelectionModel().getSelectedItem();
+            fastFood.setMyImage(newImage);
+            // Update status
+        }
+
+    }
+
+    public void rowSelected() {
+        FastFoods fastFood = (FastFoods)myTableView.getSelectionModel().getSelectedItem();
+        if (fastFood.getMyImage() != null) {
+            myImageView2.setImage(fastFood.getMyImage());
+        }
+    }
 }

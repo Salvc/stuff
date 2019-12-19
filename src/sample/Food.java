@@ -13,10 +13,7 @@ public class Food implements Serializable {
     transient private final SimpleDoubleProperty totalFat = new SimpleDoubleProperty();
     transient private final SimpleIntegerProperty sodium = new SimpleIntegerProperty();
     transient private final SimpleIntegerProperty carbs = new SimpleIntegerProperty();
-
-
-
-    private final SimpleIntegerProperty servingSize = new SimpleIntegerProperty();
+    transient private final SimpleIntegerProperty servingSize = new SimpleIntegerProperty();
 
 
     //Constructor

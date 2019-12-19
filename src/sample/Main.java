@@ -18,10 +18,13 @@ public class Main extends Application {
         Parent root = loader.load();
         myController = loader.getController();
         myController.primaryStage = primaryStage;        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 1023, 903));
+        primaryStage.setScene(new Scene(root, 1020, 903));
         primaryStage.show();
     }
-
+    public void stop() {
+        // When the Application stops, save all the text seen in GUI View
+        myController.save();
+    }
 
     public static void main(String[] args) {
         launch(args);
