@@ -222,6 +222,7 @@ public class FastFoods extends Food implements Serializable {
                 in.readObject();
             }
 
+
             // Done restoring data; close the object stream
             in.close();
         } catch (Exception ex) {
